@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;choreTracker/src/main/webapp/WEB-INF/jndex.jsp&apos; to &apos;index.jsp&apos;" description="Rename resource &apos;jndex.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/webapp/WEB-INF/jndex.jsp" name="index.jsp" stamp="1709943752012" updateReferences="true"/>
+</session>

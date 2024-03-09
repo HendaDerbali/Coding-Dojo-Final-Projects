@@ -1,0 +1,39 @@
+package com.choreTracker.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.choreTracker.models.Job;
+import com.choreTracker.models.User;
+import com.choreTracker.services.JobService;
+import com.choreTracker.services.UserService;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+@RequestMapping("/")
+public class JobController {
+	// First Step Usually add this to link this controller with services :
+	@Autowired
+	UserService userService;
+	@Autowired
+	JobService jobService;
+
+	// Second Step : Routes :
+
+	// ? Create : ( Form Many to one with multi select List on One )
+
+	@RequestMapping("addJob")
+	public String newJob(@ModelAttribute("job") Job job, Model model, HttpSession session) {
+		// 3 session lines : to make bring the user in the session
+		User user = userService.findById((Long) session.getAttribute("userId"));
+		model.addAttribute("user", user);
+		System.out.println(user);
+
+		return "newJob.jsp";
+	}
+
+}

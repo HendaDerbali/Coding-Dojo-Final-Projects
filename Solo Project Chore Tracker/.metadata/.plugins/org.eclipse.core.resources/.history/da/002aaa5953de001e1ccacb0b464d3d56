@@ -1,0 +1,116 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!-- New line below to use the JSP Standard Tag Library -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+
+<!-- Only in Form page to use data binding and to deal with Model error validation -->
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page isErrorPage="true"%>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Chore Tracker Dashboard</title>
+<!-- for Bootstrap CSS -->
+<link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+<!-- YOUR own local CSS -->
+<link rel="stylesheet" href="/css/main.css" />
+<!-- For any Bootstrap that uses JS -->
+<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+	<h1>
+		Welcome,
+		<c:out value="${user.firstName}" />
+		<c:out value="${user.lastName}" />
+		!
+	</h1>
+	<!-- Logout -->
+
+	<div class="col-12 d-flex justify-content-between">
+		<p>
+			<a href="/logout">logout</a>
+		</p>
+		<p>
+			<a href="/addJob">+ Add a Job</a>
+		</p>
+	</div>
+
+	<div class="row">
+		<!-- First Column for All Jobs -->
+		<div class="col-md-6">
+			<!-- Table To Display All Jobs -->
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Job Title</th>
+						<th>Location</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Display All Jobs -->
+					<c:forEach var="job" items="${jobs}">
+						<c:if test="${user.id!=job.userWhoAdd.id}">
+							<tr>
+								<td><c:out value="${job.title}" /></td>
+								<td><c:out value="${job.location}" /></td>
+								<td><a href="/view/${job.id}" style="margin-right: 10px">view</a>
+									<a href="/add/${job.id}" style="margin-right: 10px">add</a> <c:if
+										test="${user == job.user}">
+										<a href="/edit/${job.id}">edit</a>
+										<!-- Delete -->
+										<form action="/deleteJob/${job.id}" method="post"
+											style="display: inline">
+											<input type="hidden" name="_method" value="delete">
+											<button type="submit" class="btn btn-link btn-sm">cancel</button>
+										</form>
+									</c:if></td>
+							</tr>
+						</c:if>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Second Column for My Jobs -->
+		<div class="col-md-6">
+			<!-- Table To display Job added By the actual user -->
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>
+							<h3>My Jobs -</h3>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Display All Jobs added by user -->
+					<c:forEach var="job" items="${jobs}">
+						<c:if test="${user.id==job.userWhoAdd.id}">
+							<tr>
+							<td>
+								<div class="col-12 d-flex justify-content-between">
+									<c:out value="${job.title}" /> <a
+										href="/view/${job.id}" style="margin-right: 10px">View</a> <!-- Delete -->
+										<form action="/deleteJob/${job.id}" method="post"
+											style="display: inline">
+											<input type="hidden" name="_method" value="delete">
+											<button type="submit" class="btn btn-link btn-sm">Done</button>
+										</form></td>
+								</div>
+							</tr>
+						</c:if>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

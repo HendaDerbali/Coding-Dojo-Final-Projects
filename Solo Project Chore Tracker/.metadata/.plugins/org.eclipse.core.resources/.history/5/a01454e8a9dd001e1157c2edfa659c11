@@ -1,0 +1,5 @@
+package com.choreTracker.controllers;
+
+public class MainController {
+
+}

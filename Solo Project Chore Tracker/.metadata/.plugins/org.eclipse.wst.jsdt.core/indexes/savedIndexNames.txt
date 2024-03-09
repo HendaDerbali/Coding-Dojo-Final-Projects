@@ -1,0 +1,8 @@
+INDEX VERSION 1.4+C:\Users\DERBALI\Desktop\Coding Dojo\06- Projects And Algorithms\Solo Project Chore Tracker\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+3444559406.index
+2341686669.index
+301327493.index
+2980042673.index
+3434114019.index
+1281748166.index
+4082440129.index

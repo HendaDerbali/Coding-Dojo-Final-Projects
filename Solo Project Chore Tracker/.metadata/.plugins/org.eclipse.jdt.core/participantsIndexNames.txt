@@ -1,0 +1,3 @@
+INDEX VERSION 1.134
+C:\Users\DERBALI\Desktop\Coding Dojo\06- Projects And Algorithms\Solo Project Chore Tracker\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2341686669.index
+\choreTracker\src\main\java

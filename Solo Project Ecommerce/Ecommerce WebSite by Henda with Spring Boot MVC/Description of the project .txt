@@ -1,0 +1,7 @@
+		** Description of the project **
+
+This is the beginning of an e-commerce website (online sales)
+This website can have one or more admins: their role is to publish categories and products.
+
+Users (who are not admins) can log in, add selected products to their purchasing list, they can also comment, like the selected products ...
+The goal is then to use Spring Boot and Spring Boot Security for the Backend part , and React for the Front End part

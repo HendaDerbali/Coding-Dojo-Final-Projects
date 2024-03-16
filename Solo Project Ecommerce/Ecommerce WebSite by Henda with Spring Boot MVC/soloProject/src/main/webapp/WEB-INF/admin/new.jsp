@@ -24,6 +24,7 @@
 
 </head>
 <body>
+	<h1>Welcome, ${user.firstName} ${user.lastName}</h1>
 
 	<div class="container">
 		<div class="row">
@@ -36,6 +37,12 @@
 						<form:label path="name">Name:</form:label>
 						<form:errors path="name" class="text-danger" />
 						<form:input path="name" class="form-control" />
+					</div>
+					<!-- This is a hidden row to submit user id when creating a new Book -->
+					<div class="form-group row">
+						<form:errors path="user" class="error" />
+						<form:input type="hidden" path="user" value="${user.id}"
+							class="form-control" />
 					</div>
 					<input type="submit" value="Submit" class="btn btn-success" />
 				</form:form>
@@ -62,11 +69,18 @@
 						<form:errors path="price" class="text-danger" />
 						<form:input path="price" class="form-control" />
 					</div>
+					<!-- This is a hidden row to submit user id when creating a new Book -->
+					<div class="form-group row">
+						<form:errors path="user" class="error" />
+						<form:input type="hidden" path="user" value="${user.id}"
+							class="form-control" />
+					</div>
 					<input type="submit" value="Submit" class="btn btn-success" />
 				</form:form>
 			</div>
 		</div>
 	</div>
+
 
 	<br />
 	<br />
@@ -84,23 +98,29 @@
 			</select>
 		</div>
 
-		<!-- Dropdown List for Products -->
+		<!-- Dropdown List for Products created by user Logged in -->
 		<div class="form-group">
 			<label for="productId">Select Product:</label> <select
 				class="form-control" id="productId" name="productId">
 				<option value="">Select Product</option>
 				<c:forEach items="${products}" var="product">
-					<option value="${product.id}">${product.name}</option>
+					<!-- Check if the product belongs to the logged-in user -->
+					<c:if test="${product.user.id eq user.id}">
+						<option value="${product.id}">${product.name}</option>
+					</c:if>
 				</c:forEach>
 			</select>
 		</div>
 
-		<!-- Hidden Field for User ID -->
-		<input type="hidden" name="userId" value="${user.id}" />
+
+		<!-- Hidden Field for CSRF Token -->
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />
 
 		<!-- Submit Button -->
 		<button type="submit" class="btn btn-primary">Associate</button>
 	</form>
+
 
 
 

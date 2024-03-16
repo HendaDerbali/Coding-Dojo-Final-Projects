@@ -108,30 +108,37 @@ public class AdminController {
 
 	// Associate Product To Category :
 
-	@PostMapping("/associateCategoriesProducts") // Make sure the path matches the form action
+	@PostMapping("/associateCategoriesProducts")
 	public String addCategoryToProduct(@RequestParam("categoryId") Long categoryId,
-			@RequestParam("productId") Long productId, Model model, Principal principal) {
+	        @RequestParam("productId") Long productId, Model model, Principal principal) {
 
-		// Retrieve the authenticated user
-		String email = principal.getName();
-		User user = userService.findByEmail(email);
+	    // Retrieve the authenticated user
+	    String email = principal.getName();
+	    User user = userService.findByEmail(email);
 
-		// Find the product and category
-		Product product = productService.findProduct(productId);
-		Category category = categoryService.findCategory(categoryId);
+	    // Find the product and category
+	    Product product = productService.findProduct(productId);
+	    Category category = categoryService.findCategory(categoryId);
 
-		// Ensure that the product and category exist and are associated with the
-		// current user
-		if (product == null || category == null || !user.equals(product.getUser())
-				|| !user.equals(category.getUser())) {
-			return "redirect:/home1"; // Redirect if product or category is not found or not associated with the user
-		}
+	    // Ensure that the product and category exist and are associated with the current user
+	    if (product == null || category == null || !user.equals(product.getUser())
+	            || !user.equals(category.getUser())) {
+	        return "redirect:/home1"; // Redirect if product or category is not found or not associated with the user
+	    }
 
-		// Add the category to the product and vice versa
-		product.getCategories().add(category);
-		category.getProducts().add(product);
+	    // Check if the category is already associated with the product
+	    if (!product.getCategories().contains(category)) {
+	        // Add the category to the product and vice versa
+	        product.getCategories().add(category);
+	        category.getProducts().add(product);
 
-		return "redirect:/home1"; // Redirect to the admin home page
+	        // Save changes to the database
+	        productService.updateProduct(product);
+	        categoryService.updateCategory(category);
+	    }
+
+	    return "redirect:/home1"; // Redirect to the admin home page
 	}
+
 
 }

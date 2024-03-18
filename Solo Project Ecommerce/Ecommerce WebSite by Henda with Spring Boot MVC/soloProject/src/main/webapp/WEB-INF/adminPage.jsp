@@ -15,10 +15,11 @@
 
 	<div class="container">
 		<h1>Welcome, ${currentUser.firstName}</h1>
+		<!-- Logout -->
 		<form id="logoutForm" method="POST" action="/logout">
 			<input type="hidden" name="${_csrf.parameterName}"
 				value="${_csrf.token}" /> <input type="submit"
-				class="btn btn-danger" value="Logout!" />
+				class="btn btn-danger" class="logout-style" value="Logout!" />
 		</form>
 
 		<table class="table">

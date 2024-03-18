@@ -1,5 +1,6 @@
 package com.soloProject.controllers;
 
+import java.awt.print.Book;
 import java.security.Principal;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.soloProject.models.Category;
@@ -44,6 +46,13 @@ public class AdminController {
 		User user = userService.findByEmail(email);
 		model.addAttribute("user", user);
 		System.out.println(user);
+
+		// List Products and Categories to display in Association lists
+		List<Category> categories = categoryService.allCategorys(); // Make sure this method name matches your service
+																	// method
+		List<Product> products = productService.allProducts(); // Same here, ensure method name is correct
+		model.addAttribute("categories", categories);
+		model.addAttribute("products", products);
 
 		return "admin/home1.jsp";
 	}
@@ -110,35 +119,130 @@ public class AdminController {
 
 	@PostMapping("/associateCategoriesProducts")
 	public String addCategoryToProduct(@RequestParam("categoryId") Long categoryId,
-	        @RequestParam("productId") Long productId, Model model, Principal principal) {
+			@RequestParam("productId") Long productId) {
 
-	    // Retrieve the authenticated user
-	    String email = principal.getName();
-	    User user = userService.findByEmail(email);
+		// Find the product and category based on id s
+		Product product = productService.findProduct(productId);
+		Category category = categoryService.findCategory(categoryId);
 
-	    // Find the product and category
-	    Product product = productService.findProduct(productId);
-	    Category category = categoryService.findCategory(categoryId);
+		// Check if both product and category exist
+		if (product != null && category != null) {
+			// Check if the category is not already associated with the product
+			if (!product.getCategories().contains(category)) {
+				// Add the category to the product and vice versa
+				product.getCategories().add(category);
+				productService.updateProduct(product);
+			}
+		}
 
-	    // Ensure that the product and category exist and are associated with the current user
-	    if (product == null || category == null || !user.equals(product.getUser())
-	            || !user.equals(category.getUser())) {
-	        return "redirect:/home1"; // Redirect if product or category is not found or not associated with the user
-	    }
-
-	    // Check if the category is already associated with the product
-	    if (!product.getCategories().contains(category)) {
-	        // Add the category to the product and vice versa
-	        product.getCategories().add(category);
-	        category.getProducts().add(product);
-
-	        // Save changes to the database
-	        productService.updateProduct(product);
-	        categoryService.updateCategory(category);
-	    }
-
-	    return "redirect:/home1"; // Redirect to the admin home page
+		// Redirect to the home page
+		return "redirect:/home1";
 	}
 
+	// Edit Category :
+	// ? Edit :
+
+	@RequestMapping("/categories/{id}")
+	public String editCategory(@PathVariable("id") Long id, Principal principal, Model model, HttpSession session) {
+
+		if (principal == null) {
+			return "redirect:/login";
+		}
+
+		String email = principal.getName();
+		User user = userService.findByEmail(email);
+		model.addAttribute("user", user);
+		System.out.println(user);
+
+		Category category = categoryService.findCategory(id);
+		model.addAttribute("category", category);
+		System.out.println(category);
+
+		return "admin/editCategory.jsp";
+	}
+
+	@RequestMapping(value = "/editCategory/{categoryId}", method = RequestMethod.PUT)
+	public String updateCategory(@Valid @ModelAttribute("category") Category category, BindingResult result,
+			Principal principal, Model model, HttpSession session, @PathVariable("categoryId") Long categoryId) {
+		// Session
+		if (principal == null) {
+			return "redirect:/login";
+		}
+
+		String email = principal.getName();
+		User user = userService.findByEmail(email);
+		model.addAttribute("user", user);
+		System.out.println(user);
+
+		if (result.hasErrors()) {
+			model.addAttribute("errors", result.getAllErrors());
+			return "admin/editCategory.jsp";
+		} else {
+			// Set the category id before updating
+			category.setId(categoryId);
+			categoryService.updateCategory(category);
+			return "redirect:/home1";
+		}
+	}
+
+	// Edit Product :
+	// ? Edit :
+
+	@RequestMapping("/products/{id}")
+	public String editProduct(@PathVariable("id") Long id, Principal principal, Model model, HttpSession session) {
+		// session
+		if (principal == null) {
+			return "redirect:/login";
+		}
+
+		String email = principal.getName();
+		User user = userService.findByEmail(email);
+		model.addAttribute("user", user);
+		System.out.println(user);
+
+		Product product = productService.findProduct(id);
+		model.addAttribute("product", product);
+		System.out.println(product);
+
+		return "admin/editProduct.jsp";
+	}
+
+	@RequestMapping(value = "/editProduct/{productId}", method = RequestMethod.PUT)
+	public String updateProduct(@Valid @ModelAttribute("product") Product product, BindingResult result,
+			Principal principal, Model model, HttpSession session, @PathVariable("productId") Long productId) {
+		// Session
+		if (principal == null) {
+			return "redirect:/login";
+		}
+
+		String email = principal.getName();
+		User user = userService.findByEmail(email);
+		model.addAttribute("user", user);
+		System.out.println(user);
+
+		if (result.hasErrors()) {
+			model.addAttribute("errors", result.getAllErrors());
+			return "admin/editProduct.jsp";
+		} else {
+			// Set the Product id before updating
+			product.setId(productId);
+			productService.updateProduct(product);
+			return "redirect:/home1";
+		}
+	}
+
+	// ? Delete Product :
+	@RequestMapping(value = "/deleteProduct/{id}", method = RequestMethod.DELETE)
+	public String destroyProduct(@PathVariable("id") Long id) {
+		productService.deleteProduct(id);
+		return "redirect:/home1";
+	}
+
+	// ? Delete Category :
+	@RequestMapping(value = "/deleteCategory/{id}", method = RequestMethod.DELETE)
+	public String destroyCategory(@PathVariable("id") Long id) {
+		categoryService.deleteCategory(id);
+		return "redirect:/home1";
+	}
 
 }

@@ -16,12 +16,15 @@
 <body>
 
 	<div class="container">
-		<h1>Welcome, ${user.firstName}</h1>
-		<form id="logoutForm" method="POST" action="/logout">
-			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" /> <input type="submit"
-				class="btn btn-danger" value="Logout!" />
-		</form>
+		<h1 class="title">Welcome, ${user.firstName}</h1>
+		<!-- Logout -->
+		<div class="logout-style">
+			<form id="logoutForm" method="POST" action="/logout">
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" /> <input type="submit"
+					class="btn btn-danger" value="Logout!" />
+			</form>
+		</div>
 
 		<div class="row">
 			<div class="col-md-6">

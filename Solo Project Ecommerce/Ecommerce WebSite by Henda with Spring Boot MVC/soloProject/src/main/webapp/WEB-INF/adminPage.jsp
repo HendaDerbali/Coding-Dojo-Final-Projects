@@ -10,17 +10,23 @@
 <!-- Custom CSS -->
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 <title>Admin Dashboard</title>
+<!--CSS & js Folder-->
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<script type="text/javascript" src="/js/app.js"></script>
+
 </head>
 <body>
 
-	<div class="container">
-		<h1>Welcome, ${currentUser.firstName}</h1>
+	<div class="container1">
+    <h1 class="title">Welcome, ${currentUser.firstName}</h1>
 		<!-- Logout -->
-		<form id="logoutForm" method="POST" action="/logout">
-			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" /> <input type="submit"
-				class="btn btn-danger" class="logout-style" value="Logout!" />
-		</form>
+		<div class="logout-style">
+			<form id="logoutForm" method="POST" action="/logout">
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" /> <input type="submit"
+					class="btn btn-danger" value="Logout!" />
+			</form>
+		</div>
 
 		<table class="table">
 			<thead>

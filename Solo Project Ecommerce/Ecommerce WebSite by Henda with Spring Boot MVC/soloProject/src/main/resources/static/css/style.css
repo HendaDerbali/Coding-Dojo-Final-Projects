@@ -9,12 +9,45 @@
 	width: 48%;
 }
 
+/* Logout style */
 .logout-style {
-	position: absolute;
-	top: 10px;
-	right: 10px;
+	float: right;
+	margin-top: 10px; 
 }
 
 .thead-color {
-background-color: skyblue
+	background-color: skyblue
+}
+/* container styling */
+.container1 {
+	position: absolute;
+	top: 10%; 
+	left: 50%;
+	transform: translateX(-50%);
+	width: 60%; 
+	background-color: #f7f6f3; 
+	border: 6px solid #cccccc;
+	border-radius: 20px;
+	padding: 20px;
+	
+}
+
+html, body {
+	background-color: #faf9f6; 
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+/* Title styling */
+.title {
+    font-size: 36px; 
+    font-weight: bold; 
+    color: #333333a1; 
+    text-align: center; 
+    margin-bottom: 20px; 
+    background-color: #f7f7f7; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }

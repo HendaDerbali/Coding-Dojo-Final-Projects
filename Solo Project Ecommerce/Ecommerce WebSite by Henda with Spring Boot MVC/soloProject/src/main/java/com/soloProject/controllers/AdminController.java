@@ -1,6 +1,5 @@
 package com.soloProject.controllers;
 
-import java.awt.print.Book;
 import java.security.Principal;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +26,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
+@RequestMapping("/")
 public class AdminController {
 
 	// First Step Usually add this to link this controller with services :
@@ -35,6 +36,15 @@ public class AdminController {
 	ProductService productService;
 	@Autowired
 	CategoryService categoryService;
+
+	// Route For testing :
+	@GetMapping("")
+	public String test(@ModelAttribute("category") Category category, Model model) {
+		// List Products and Categories to display in Association lists
+		List<Category> categories = categoryService.allCategorys();
+		model.addAttribute("categories", categories);
+		return "dashboard.jsp";
+	}
 
 	// Routes
 	@RequestMapping("/home1")
@@ -48,9 +58,8 @@ public class AdminController {
 		System.out.println(user);
 
 		// List Products and Categories to display in Association lists
-		List<Category> categories = categoryService.allCategorys(); // Make sure this method name matches your service
-																	// method
-		List<Product> products = productService.allProducts(); // Same here, ensure method name is correct
+		List<Category> categories = categoryService.allCategorys(); // method
+		List<Product> products = productService.allProducts();
 		model.addAttribute("categories", categories);
 		model.addAttribute("products", products);
 

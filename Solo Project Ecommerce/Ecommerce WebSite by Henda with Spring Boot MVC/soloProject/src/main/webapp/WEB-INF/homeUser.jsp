@@ -15,7 +15,7 @@
 </head>
 <body>
 
-	<div class="container">
+	<div class="container1">
 		<h1 class="title">Welcome, ${user.firstName}</h1>
 		<!-- Logout -->
 		<div class="logout-style">

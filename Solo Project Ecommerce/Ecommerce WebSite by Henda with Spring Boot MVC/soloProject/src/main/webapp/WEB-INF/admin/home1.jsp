@@ -32,17 +32,13 @@
 	<div class="container1">
 
 		<h1 class="title">Welcome, ${user.firstName} ${user.lastName}</h1>
-
 		<!-- Logout -->
 		<div class="logout-style">
-			<!-- Logout -->
-			<div class="logout-style">
-				<form id="logoutForm" method="POST" action="/logout">
-					<input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" /> <input type="submit"
-						class="btn btn-danger" value="Logout!" />
-				</form>
-			</div>
+			<form id="logoutForm" method="POST" action="/logout">
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" /> <input type="submit"
+					class="btn btn-danger" value="Logout!" />
+			</form>
 		</div>
 		<br />
 		<div>

@@ -27,15 +27,33 @@
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 
 </head>
-<a href="/home">login-register</a>
+<body style="background-color: #faf9f6;">
+	<div class="container1">
+		<h1 class="title">Online Shopping</h1>
+		<nav class="navbar">
+			<div>
+				<c:forEach var="category" items="${categories}">
+					<button class="btns">
+						<c:out value="${category.name}"></c:out>
+					</button>
+				</c:forEach>
+			</div>
+			<div>
+				<a href="/login"><button style="background-color: #03032152">Register
+						& Login</button></a>
+			</div>
+		</nav>
+		<br />
+		<div class="images">
+			<img src="/images/beauty.jpg" alt="Beauty Image" class="logo">
+			<img src="/images/electronic.png" alt="Beauty Image" class="logo">
+			<img src="/images/3.png" alt="Beauty Image" class="logo">
 
-<c:forEach var="category" items="${categories}">
-
-	<ul>
-		<c:out value="${category.name}"></c:out>
-
-	</ul>
-
-</c:forEach>
+		</div>
+		<div class="social-media-links">
+			<a href="">contact us</a> <a href="">FB</a> <a href="">Instagram</a>
+			<a href="">other informations to add later</a>
+		</div>
+	</div>
 </body>
 </html>

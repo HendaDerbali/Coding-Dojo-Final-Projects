@@ -27,110 +27,114 @@ import com.soloProject.validator.UserValidator;
 
 @Controller
 public class UserController {
-
+	
 	private UserService userService;
 	private UserValidator userValidator;
-
+	
 	public UserController(UserService userService, UserValidator userValidator) {
 		this.userService = userService;
 		this.userValidator = userValidator;
 	}
-
+	
 	@RequestMapping("/register")
-	public String registration(@Valid @ModelAttribute("user") User user, BindingResult result, Model model,
-			HttpSession session, HttpServletRequest request) {
+	public String registration(
+			@Valid @ModelAttribute("user") User user, 
+			BindingResult result, 
+			Model model, 
+			HttpSession session,
+			HttpServletRequest request) {
 		userValidator.validate(user, result);
 		// Store the password before it is encrypted
 		String password = user.getPassword();
-		if (result.hasErrors()) {
+		if(result.hasErrors()) {
 			return "loginPage.jsp";
 		}
 		// Make first user SUPER ADMIN
-		if (userService.allUsers().size() == 0) {
+		if(userService.allUsers().size()==0) {
 			userService.newUser(user, "ROLE_SUPER_ADMIN");
-		} else {
+		}else {
 			userService.newUser(user, "ROLE_USER");
 		}
-
+		
 		// Log in new user with the password we stored before encrypting it
 		authWithHttpServletRequest(request, user.getEmail(), password);
-		return "redirect:/";
+		return "redirect:/login";
 	}
-
+	
 	// We will call this method to automatically log in newly registered users
 	public void authWithHttpServletRequest(HttpServletRequest request, String email, String password) {
-		try {
-			request.login(email, password);
-		} catch (ServletException e) {
-			System.out.println("Error while login: " + e);
-		}
+	    try {
+	        request.login(email, password);
+	    } catch (ServletException e) {
+	    	System.out.println("Error while login: " + e);
+	    }
 	}
-
+	
 	@RequestMapping("/admin/{id}")
 	public String makeAdmin(Principal principal, @PathVariable("id") Long id, Model model) {
-		if (principal == null) {
+		if(principal==null) {
 			return "redirect:/login";
 		}
-
+		
 		User user = userService.findById(id);
 		userService.upgradeUser(user);
-
+		
 		model.addAttribute("users", userService.allUsers());
-
+		 
 		return "redirect:/home";
 	}
-
+	
 	@RequestMapping("/login")
-	public String login(@ModelAttribute("user") User user,
-			@RequestParam(value = "error", required = false) String error,
-			@RequestParam(value = "logout", required = false) String logout, Model model) {
-
-		if (error != null) {
-			model.addAttribute("errorMessage", "Invalid Credentials, Please try again.");
+	public String login(
+			@ModelAttribute("user") User user,
+			@RequestParam(value="error", required=false) String error, 
+			@RequestParam(value="logout", required=false) String logout, 
+			Model model) {
+		
+		if(error!=null) {
+			model.addAttribute("errorMessage","Invalid Credentials, Please try again.");
 		}
-		if (logout != null) {
-			model.addAttribute("logoutMessage", "Logout Successful!");
+		if(logout!=null) {
+			model.addAttribute("logoutMessage","Logout Successful!");
 		}
-
+		
 		return "loginPage.jsp";
 	}
-
-	@RequestMapping(value = { "/", "/home" })
+	
+	@RequestMapping(value={"/", "/home"})
 	public String home(Principal principal, Model model) {
-		if (principal == null) {
+		if(principal==null) {
 			return "redirect:/login";
 		}
 		String email = principal.getName();
 		User user = userService.findByEmail(email);
 		model.addAttribute("user", user);
-
-		if (user != null) {
+		
+		if(user!=null) {
 			user.setLastLogin(new Date());
 			userService.updateUser(user);
-			// If the user is an ADMIN or SUPER_ADMIN they will be redirected to the admin
-			// page
-			if (user.getRoles().get(0).getName().contains("ROLE_SUPER_ADMIN")
-					|| user.getRoles().get(0).getName().contains("ROLE_ADMIN")) {
+			// If the user is an ADMIN or SUPER_ADMIN they will be redirected to the admin page
+			if(user.getRoles().get(0).getName().contains("ROLE_SUPER_ADMIN")||user.getRoles().get(0).getName().contains("ROLE_ADMIN")) {
 				model.addAttribute("currentUser", userService.findByEmail(email));
 				model.addAttribute("users", userService.allUsers());
 				return "adminPage.jsp";
 			}
 			// All other users are redirected to the home page
 		}
-
-		return "home.jsp";
+		
+		return "homeUser.jsp";
 	}
-
+	
 	@RequestMapping("/delete/{id}")
-	public String deleteUser(Principal principal, @PathVariable("id") Long id, HttpSession session, Model model) {
-		if (principal == null) {
+	public String deleteUser(Principal principal, @PathVariable("id") Long id, HttpSession session, Model model) {	
+		if(principal==null) {
 			return "redirect:/login";
 		}
 		User user = userService.findById(id);
 		userService.deleteUser(user);
-
+		
 		model.addAttribute("users", userService.allUsers());
-
+		 
 		return "redirect:/home";
 	}
 

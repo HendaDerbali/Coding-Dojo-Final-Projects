@@ -37,7 +37,7 @@ public class AdminController {
 	@Autowired
 	CategoryService categoryService;
 
-	// Route For testing :
+	// Dashboard Route  :
 	@GetMapping("")
 	public String test(@ModelAttribute("category") Category category, Model model) {
 		// List Products and Categories to display in Association lists

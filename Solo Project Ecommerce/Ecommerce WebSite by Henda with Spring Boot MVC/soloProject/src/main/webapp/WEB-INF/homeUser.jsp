@@ -16,7 +16,7 @@
 <body>
 
 	<div class="container1">
-		<h1 class="title">Welcome, ${user.firstName}</h1>
+		<h1 class="title">Welcome, ${user.firstName} ${user.lastName}</h1>
 		<!-- Logout -->
 		<div class="logout-style">
 			<form id="logoutForm" method="POST" action="/logout">
@@ -43,7 +43,34 @@
 				</p>
 			</div>
 		</div>
-	</div>
+		<nav class="navbar" style="width: 100%;">
+			<div class="category-container"
+				style="display: flex; justify-content: center; flex-direction: row; flex-wrap: wrap; margin: 0 auto;">
+				<c:forEach var="category" items="${categories}">
+					<div class="category"
+						style="flex-shrink: 0; min-width: 200px; margin-right: 20px; text-align: center;">
+						<button class="btn btns" style="width: 100%;">${category.name}</button>
+						<div class="products" style="margin-top: 10px;">
+							<c:forEach var="product" items="${category.products}">
+								<div style="margin-top: 5px;"><a href="product/${product.id}">${product.name}</a></div>
+							</c:forEach>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+		</nav>
 
+		<br />
+		<div class="images">
+			<img src="/images/beauty.jpg" alt="Beauty Image" class="logo">
+			<img src="/images/electronic.png" alt="Beauty Image" class="logo">
+			<img src="/images/3.png" alt="Beauty Image" class="logo">
+
+		</div>
+		<div class="social-media-links">
+			<a href="">contact us</a> <a href="">FB</a> <a href="">Instagram</a>
+			<a href="">other informations to add later</a>
+		</div>
+	</div>
 </body>
 </html>

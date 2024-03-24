@@ -2,23 +2,29 @@ package com.soloProject.controllers;
 
 import java.security.Principal;
 import java.util.Date;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.soloProject.models.Category;
+import com.soloProject.models.Product;
 import com.soloProject.models.User;
+import com.soloProject.services.CategoryService;
+import com.soloProject.services.ProductService;
 import com.soloProject.services.UserService;
 import com.soloProject.validator.UserValidator;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 //HELP
 // https://stackoverflow.com/questions/74907533/the-method-antmatchersstring-is-undefined-for-the-type
@@ -29,11 +35,19 @@ import com.soloProject.validator.UserValidator;
 public class UserController {
 	
 	private UserService userService;
+	private CategoryService categoryService;
+
+	private ProductService  productService;
+
+
 	private UserValidator userValidator;
 	
-	public UserController(UserService userService, UserValidator userValidator) {
+	public UserController(UserService userService,CategoryService categoryService,ProductService productService, UserValidator userValidator) {
 		this.userService = userService;
 		this.userValidator = userValidator;
+		this.categoryService = categoryService;
+		this.productService = productService;
+
 	}
 	
 	@RequestMapping("/register")
@@ -101,14 +115,22 @@ public class UserController {
 		return "loginPage.jsp";
 	}
 	
+	
 	@RequestMapping(value={"/", "/home"})
-	public String home(Principal principal, Model model) {
+	public String home(Principal principal,@ModelAttribute("category") Category category, @ModelAttribute("product") Product product
+			,Model model) {
 		if(principal==null) {
 			return "redirect:/login";
 		}
 		String email = principal.getName();
 		User user = userService.findByEmail(email);
 		model.addAttribute("user", user);
+		
+		// List Products and Categories to display in Association lists
+				List<Category> categories = categoryService.allCategorys();
+				model.addAttribute("categories", categories);
+				List<Product> products = productService.allProducts();
+				model.addAttribute("products", products);
 		
 		if(user!=null) {
 			user.setLastLogin(new Date());

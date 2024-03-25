@@ -1,0 +1,17 @@
+		** Description of the Solo projects **
+
+I did two solo projects
+
+*/ The first one : in a plateform wireframe : 1654264630__chore_tracker 
+
+*/ The Second One : Henda's E-commerce web site :  This is the beginning of an e-commerce website (online sales)
+This website can have one or more admins: their role is to publish categories and products.
+One Super Admin : he can delete even other admins ( he is me )
+
+Users (who are not admins) can log in, add selected products to their purchasing list, they can also comment, like the selected products ...
+The goal is then to use Spring Boot MVC and Spring Boot Security for the Backend part ans JSP for Front End 
+
+*/ In the future ,i want to integrate them with  React for the Front End part
+
+
+Repo Link of two projects  : https://github.com/HendaDerbali/Coding-Dojo-Final-Projects

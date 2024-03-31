@@ -13,7 +13,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Products Details</title>
+<title>Purchase List</title>
 <!--CSS & js Folder-->
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 <script type="text/javascript" src="/js/app.js"></script>
@@ -28,10 +28,8 @@
 
 
 </head>
-<body>
 <body style="background-color: #faf9f6;">
 	<div class="container1">
-
 		<h1 class="title">Welcome, ${user.firstName} ${user.lastName}</h1>
 		<!-- Logout -->
 		<div class="logout-style">
@@ -41,26 +39,23 @@
 					class="btn btn-danger" value="Logout!" />
 			</form>
 		</div>
-		<br />
-		<p>
-			Product Name :
-			<c:out value="${product.name}" />
-		</p>
-		<p>
-			Description :
-			<c:out value="${product.description}" />
-		</p>
-		<p>
-			Price :
-			<c:out value="${product.price}" />
-			$
-		</p>
-		<br />
-		<div style="display: flex; justify-content: space-around">
-			<a href="/product/${product.id}/purchase">
-			<button class="btn btn-primary">Add to my purchase list</button></a> 
-			<a href="">Add Comment</a>
-			<a href="/home">back to home page</a>
-		</div>
+		<!-- Products added to Purchase List  -->
+		<ul>
+			<c:if test="${empty user.productsAddedToPurchageList}">
+				<p>Your purchase list is empty. Start adding products !</p>
+			</c:if>
+			<c:forEach var="product" items="${user.productsAddedToPurchageList}">
+				<c:choose>
+					<c:when test="${product.userWhoOwnsPurchaseList.id == user.id}">
+						<li style="display: flex;">
+							<p style="margin-right: 20px" >${product.name}</p> 
+							 <a href="/deleteProductFromPurchaseList/${product.id}" >Delete</a>
+						</li>
+					</c:when>
+				</c:choose>
+			</c:forEach>
+		</ul>
+		<br /> <a href="/home">back to home page</a>
 	</div>
+</body>
 </html>

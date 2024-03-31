@@ -62,6 +62,10 @@ public class User {
 	private List<Category> categories;
 
 	
+	// -------- 1:M ----------
+	@OneToMany(mappedBy = "userWhoOwnsPurchaseList", fetch = FetchType.LAZY)
+	private List<Product> productsAddedToPurchageList;
+	
 	public User() {
 	}
 
@@ -152,5 +156,16 @@ public class User {
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
 	}
+
+	public List<Product> getProductsAddedToPurchageList() {
+		return productsAddedToPurchageList;
+	}
+
+	public void setProductsAddedToPurchageList(List<Product> productsAddedToPurchageList) {
+		this.productsAddedToPurchageList = productsAddedToPurchageList;
+	}
+
+
+
 
 }

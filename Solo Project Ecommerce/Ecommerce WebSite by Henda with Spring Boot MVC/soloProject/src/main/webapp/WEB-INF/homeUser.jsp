@@ -52,13 +52,19 @@
 						<button class="btn btns" style="width: 100%;">${category.name}</button>
 						<div class="products" style="margin-top: 10px;">
 							<c:forEach var="product" items="${category.products}">
-								<div style="margin-top: 5px;"><a href="product/${product.id}">${product.name}</a></div>
+								<div style="margin-top: 5px;">
+									<a href="product/${product.id}">${product.name}</a>
+								</div>
 							</c:forEach>
 						</div>
 					</div>
 				</c:forEach>
 			</div>
 		</nav>
+		<br />
+		<div style="text-align: right;">
+			<a href="product/${user.id}/purchase">Show My Purchase List</a>
+		</div>
 
 		<br />
 		<div class="images">

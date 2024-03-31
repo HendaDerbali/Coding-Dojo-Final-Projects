@@ -51,6 +51,11 @@ public class Product {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	// -------- M:1 : user - purchase List ----------
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userWhoOwnPurchaseList_id")
+	private User userWhoOwnsPurchaseList;
 
 	// This will not allow the createdAt column to be updated after creation
 	@Column(updatable = false)
@@ -144,6 +149,14 @@ public class Product {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public User getUserWhoOwnsPurchaseList() {
+		return userWhoOwnsPurchaseList;
+	}
+
+	public void setUserWhoOwnsPurchaseList(User userWhoOwnsPurchaseList) {
+		this.userWhoOwnsPurchaseList = userWhoOwnsPurchaseList;
 	}
 
 }

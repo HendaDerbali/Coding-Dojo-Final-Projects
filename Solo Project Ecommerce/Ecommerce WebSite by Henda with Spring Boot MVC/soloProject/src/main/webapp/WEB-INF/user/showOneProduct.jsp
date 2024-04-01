@@ -42,25 +42,38 @@
 			</form>
 		</div>
 		<br />
-		<p>
-			Product Name :
-			<c:out value="${product.name}" />
-		</p>
-		<p>
-			Description :
-			<c:out value="${product.description}" />
-		</p>
-		<p>
-			Price :
-			<c:out value="${product.price}" />
-			$
-		</p>
+		<div style="display: flex; justify-content: space-between;">
+			<div>
+				<p>
+					Product Name:
+					<c:out value="${product.name}" />
+				</p>
+				<p>
+					Description:
+					<c:out value="${product.description}" />
+				</p>
+				<p>
+					Price:
+					<c:out value="${product.price}" />
+					$
+				</p>
+			</div>
+			<!-- Comment List -->
+			<div>
+				<h4>List of all comments</h4>
+				<ul>
+					<c:forEach var="comment" items="${comments}">
+						<li>Comment of ${comment.user.firstName} ${comment.user.lastName}: ${comment.text}</li>
+					</c:forEach>
+				</ul>
+			</div>
+		</div>
 		<br />
 		<div style="display: flex; justify-content: space-around">
 			<a href="/product/${product.id}/purchase">
-			<button class="btn btn-primary">Add to my purchase list</button></a> 
-			<a href="">Add Comment</a>
-			<a href="/home">back to home page</a>
+				<button class="btn btn-primary">Add to my purchase list</button>
+			</a> <a href="/product/${product.id}/comment">Add Comment</a> <a
+				href="/home">back to home page</a>
 		</div>
 	</div>
 </html>

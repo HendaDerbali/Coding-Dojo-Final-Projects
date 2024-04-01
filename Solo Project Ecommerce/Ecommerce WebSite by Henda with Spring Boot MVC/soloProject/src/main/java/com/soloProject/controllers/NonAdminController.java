@@ -1,21 +1,28 @@
 package com.soloProject.controllers;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.soloProject.models.Comment;
 import com.soloProject.models.Product;
 import com.soloProject.models.User;
 import com.soloProject.services.CategoryService;
+import com.soloProject.services.CommentService;
 import com.soloProject.services.ProductService;
 import com.soloProject.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class NonAdminController {
@@ -27,6 +34,8 @@ public class NonAdminController {
 	ProductService productService;
 	@Autowired
 	CategoryService categoryService;
+	@Autowired
+	CommentService commentService;
 
 	// ? Get One Product :
 
@@ -45,6 +54,10 @@ public class NonAdminController {
 		Product product = productService.findProduct(id);
 		model.addAttribute("product", product);
 		System.out.println(product);
+
+		// Access comments associated with the product
+		List<Comment> comments = product.getComments();
+		model.addAttribute("comments", comments);
 
 		return "user/showOneProduct.jsp";
 	}
@@ -88,10 +101,47 @@ public class NonAdminController {
 
 			return "redirect:/home";
 		} else {
-			// Product not found, handle the error or display a message
-			// Redirect to an appropriate error page or handle the situation accordingly
 			return "redirect:/error";
 		}
 	}
 
+	// ? Create Comment :
+
+	@RequestMapping("/product/{id}/comment")
+	public String comment(@ModelAttribute("comment") Comment comment, @ModelAttribute("product") Product product,
+			Principal principal, Model model, HttpSession session) {
+
+		if (principal == null) {
+			return "redirect:/login";
+		}
+		String email = principal.getName();
+		User user = userService.findByEmail(email);
+		model.addAttribute("user", user);
+		System.out.println(user);
+
+		return "user/newComment.jsp";
+	}
+
+	@PostMapping("/addComment")
+	public String createComment(@Valid @ModelAttribute("comment") Comment comment, BindingResult result, Model model,
+			@RequestParam("product") Long productId) {
+		if (result.hasErrors()) {
+
+			model.addAttribute("errors", result.getAllErrors());
+			return "user/newComment.jsp";
+		} else {
+			// Find the product by its ID
+			Product product = productService.findProduct(productId);
+			if (product == null) {
+				// Handle case when product is not found
+				return "redirect:/error";
+			}
+
+			// Create the comment
+			commentService.createComment(comment);
+
+			// Redirect back to the product page
+			return "redirect:/product/" + productId;
+		}
+	}
 }

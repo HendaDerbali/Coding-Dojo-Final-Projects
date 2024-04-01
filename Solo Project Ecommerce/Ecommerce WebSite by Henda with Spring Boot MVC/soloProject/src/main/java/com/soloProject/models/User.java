@@ -54,18 +54,20 @@ public class User {
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> roles;
 
-	
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Product> products;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Category> categories;
 
-	
 	// -------- 1:M ----------
 	@OneToMany(mappedBy = "userWhoOwnsPurchaseList", fetch = FetchType.LAZY)
 	private List<Product> productsAddedToPurchageList;
-	
+
+	// -------- Many To Many : messages ----------
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<Comment> comments;
+
 	public User() {
 	}
 
@@ -165,7 +167,11 @@ public class User {
 		this.productsAddedToPurchageList = productsAddedToPurchageList;
 	}
 
+	public List<Comment> getComments() {
+		return comments;
+	}
 
-
-
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
 }

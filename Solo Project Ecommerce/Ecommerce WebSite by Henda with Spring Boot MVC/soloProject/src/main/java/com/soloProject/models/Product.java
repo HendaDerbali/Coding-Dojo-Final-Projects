@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -56,6 +58,11 @@ public class Product {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userWhoOwnPurchaseList_id")
 	private User userWhoOwnsPurchaseList;
+	
+	// -------- Many To Many  : messages ----------
+    @OneToMany(mappedBy = "product", fetch=FetchType.LAZY)
+    private List<Comment> comments;
+
 
 	// This will not allow the createdAt column to be updated after creation
 	@Column(updatable = false)
@@ -157,6 +164,14 @@ public class Product {
 
 	public void setUserWhoOwnsPurchaseList(User userWhoOwnsPurchaseList) {
 		this.userWhoOwnsPurchaseList = userWhoOwnsPurchaseList;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 
 }

@@ -14,7 +14,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Edit Category</title>
+<title>Comment</title>
 <!--CSS & js Folder-->
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 <script type="text/javascript" src="/js/app.js"></script>
@@ -27,11 +27,12 @@
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 
 </head>
-<body style="background-color: #faf9f6;">
+<body>
+	test
 	<div class="container1">
-
-		<!-- Edit Form : add hidden // method = post or put -->
-		<h1 class="title">Edit Category</h1>
+		<h1 class="title">Welcome, ${user.firstName} ${user.lastName}</h1>
+		<br /> <br />
+		<!-- Logout -->
 		<!-- Logout -->
 		<div class="logout-style">
 			<form id="logoutForm" method="POST" action="/logout">
@@ -40,41 +41,28 @@
 					class="btn btn-danger" value="Logout!" />
 			</form>
 		</div>
-		<br />
-		<div>
-			<a href="/home1">back to admin dashboard</a>
-		</div>
-		<br />
-
-		<form:form action="/editCategory/${category.id}" method="POST"
-			modelAttribute="category">
-
-			<input type="hidden" name="_method" value="put">
+		<!-- Add Comment  -->
+		<form:form action="/addComment" method="POST" modelAttribute="comment">
 			<div class="form-group">
-				<form:label path="name">Name:</form:label>
-				<form:errors path="name" class="text-danger" />
-				<form:input path="name" class="form-control" />
+				<form:label path="text">Comment:</form:label>
+				<form:errors path="text" class="text-danger" />
+				<form:input path="text" class="form-control" />
 			</div>
-			<!-- This is a hidden row to submit user id when creating a new Book -->
+			<!-- This is a hidden row to submit user id when creating a new Category -->
 			<div class="form-group row">
 				<form:errors path="user" class="error" />
 				<form:input type="hidden" path="user" value="${user.id}"
 					class="form-control" />
+				<!-- This is a hidden row to submit user id when creating a new Category -->
 			</div>
-			<input type="submit" value="Edit" class="btn btn-success" />
+			<!-- This is a hidden row to submit user id when creating a new Category -->
+			<div class="form-group row">
+				<form:errors path="product" class="error" />
+				<form:input type="hidden" path="product" value="${product.id}"
+					class="form-control" />
+			</div>
+			<br />
+			<input type="submit" value="Add" class="btn btn-success" />
 		</form:form>
-
-
-		<br />
-		<!-- Delete -->
-		<form action="/deleteCategory/${category.id}" method="post"
-			style="display: inline">
-			<input type="hidden" name="_method" value="delete"> <input
-				type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-			<button type="submit" class="btn btn-danger"
-				onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
-		</form>
 	</div>
-
-</body>
 </html>
